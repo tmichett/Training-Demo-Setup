@@ -4,8 +4,14 @@
   hosts: localhost
   vars:
     linux_username: travis
+## Course SKU Only Valid when using RHU Role courses / Not valid for RHLS
     course_sku: rh999
     ROLE_IP: 150.239.52.xx
+## Delivery Type Options VT, KVM, ROLE ##
+    delivery_type: VT
+## IP Addresses for VT or KVM courses
+    kvm_host_ip: 192.168.xxx.xxx # IP Address for KVM Host (initial connection machine)
+    kvm_foundation_ip: 192.168.122.xx  # IP Address attached to NIC2 that is available on the "Externally configured NIC for F0"
   tasks:
 
 ## Install Support Software
@@ -16,11 +22,20 @@
         state: directory
         mode: '0700'
 
-    - name: Create SSH Course File
+    - name: Create SSH Course File for ROLE
       ansible.builtin.template:
         src: Templates/SSH_Config.j2
         dest: /home/{{ linux_username }}/.ssh/config.d/{{ course_sku }}.conf
         mode: '0600'
+      when: delivery_type == "ROLE"
+
+    - name: Create SSH Course File for KVM
+      ansible.builtin.template:
+        src: Templates/SSH_Config.j2
+        dest: /home/{{ linux_username }}/.ssh/config.d/KVM.conf
+        mode: '0600'
+      when: delivery_type == "KVM"
+
 
     - name: Perform Touch on File to Ensure it Exists
       ansible.builtin.file:
