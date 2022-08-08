@@ -1,0 +1,24 @@
+
+Host kvm_*
+  StrictHostKeyChecking no
+  ForwardAgent yes
+  ForwardX11 no
+  #  PreferredAuthentications publickey
+
+Host KVM_Host
+  Port 22
+  Hostname "{{ kvm_host_ip }}"
+
+Host kvm_foundation
+  User kiosk
+  Hostname "{{ kvm_foundation_ip }}"
+  Port 22
+  IdentityFile /home/travis/.ssh/instructor_key
+  ProxyJump KVM_Host
+
+Host kvm_workstation
+  User student
+  Hostname 172.25.250.9
+  Port 22
+  IdentityFile /home/travis/.ssh/instructor_key
+  ProxyJump kvm_foundation
