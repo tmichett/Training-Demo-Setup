@@ -39,7 +39,7 @@
 
     - name: Create SSH Course File for VT
       ansible.builtin.template:
-        src: Templates/SSH_Config_KVM.j2
+        src: Templates/SSH_Config_VT.j2
         dest: /home/{{ linux_username }}/.ssh/config.d/VT.conf
         mode: '0600'
       when: delivery_type == "VT"
