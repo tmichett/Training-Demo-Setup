@@ -12,6 +12,7 @@
 ## IP Addresses for VT or KVM courses
     kvm_host_ip: 192.168.1.123 # IP Address for KVM Host (initial connection machine)
     kvm_foundation_ip: 192.168.122.71  # IP Address attached to NIC2 that is available on the "Externally configured NIC for F0"
+    classroom_ip: 150.239.59.182
   tasks:
 
 ## Install Support Software
@@ -36,6 +37,12 @@
         mode: '0600'
       when: delivery_type == "KVM"
 
+    - name: Create SSH Course File for VT
+      ansible.builtin.template:
+        src: Templates/SSH_Config_KVM.j2
+        dest: /home/{{ linux_username }}/.ssh/config.d/VT.conf
+        mode: '0600'
+      when: delivery_type == "VT"
 
     - name: Perform Touch on File to Ensure it Exists
       ansible.builtin.file:

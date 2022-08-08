@@ -1,0 +1,17 @@
+Host classroom-vt
+  Hostname {{ classroom_ip }}
+  StrictHostKeyChecking no
+  UpdateHostKeys yes
+  User instructor
+  Port 22022
+  IdentityFile ~/.ssh/gls_instructor_id_rsa
+  IdentitiesOnly yes
+
+Host {{ }}-vt
+  Hostname 172.25.252.1
+  ProxyJump classroom-vt
+  StrictHostKeyChecking no
+  UpdateHostKeys yes
+  User student
+  Port 53009
+  IdentityFile ~/.ssh/gls_instructor_id_rsa
