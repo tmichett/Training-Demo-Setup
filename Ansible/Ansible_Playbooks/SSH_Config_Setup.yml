@@ -12,7 +12,7 @@
 ## IP Addresses for VT or KVM courses
     kvm_host_ip: 192.168.1.123 # IP Address for KVM Host (initial connection machine)
     kvm_foundation_ip: 192.168.122.71  # IP Address attached to NIC2 that is available on the "Externally configured NIC for F0"
-    classroom_ip: 150.239.59.182
+    classroom_ip: "{{ ROLE_IP }}"
   tasks:
 
 ## Install Support Software
