@@ -3,7 +3,7 @@
 - name: Setup System for Github with Tools
   hosts: localhost
   vars:
-    linux_username: travis
+#    linux_username: travis  ### This variable is so that you can create the demo configuration for a user other than the Ansible User
 ## Course SKU Only Valid when using RHU Role courses / Not valid for RHLS
     course_sku: rh999
     ROLE_IP: 150.239.52.xx
@@ -19,40 +19,46 @@
 
     - name: Create SSH Config.D Directory
       ansible.builtin.file:
-        path: /home/{{ linux_username }}/.ssh/config.d
+#        path: /home/{{ linux_username }}/.ssh/config.d
+        path: ~/.ssh/config.d
         state: directory
         mode: '0700'
 
     - name: Create SSH Course File for ROLE
       ansible.builtin.template:
         src: Templates/SSH_Config.j2
-        dest: /home/{{ linux_username }}/.ssh/config.d/{{ course_sku }}.conf
+#        dest: /home/{{ linux_username }}/.ssh/config.d/{{ course_sku }}.conf
+        dest: ~/.ssh/config.d/{{ course_sku }}.conf
         mode: '0600'
       when: delivery_type == "ROLE"
 
     - name: Create SSH Course File for KVM
       ansible.builtin.template:
         src: Templates/SSH_Config_KVM.j2
-        dest: /home/{{ linux_username }}/.ssh/config.d/KVM.conf
+#        dest: /home/{{ linux_username }}/.ssh/config.d/KVM.conf
+        dest: ~/.ssh/config.d/KVM.conf
         mode: '0600'
       when: delivery_type == "KVM"
 
     - name: Create SSH Course File for VT
       ansible.builtin.template:
         src: Templates/SSH_Config_VT.j2
-        dest: /home/{{ linux_username }}/.ssh/config.d/VT.conf
+#        dest: /home/{{ linux_username }}/.ssh/config.d/VT.conf
+        dest: ~/.ssh/config.d/VT.conf
         mode: '0600'
       when: delivery_type == "VT"
 
     - name: Perform Touch on File to Ensure it Exists
       ansible.builtin.file:
-        path: /home/{{ linux_username }}/.ssh/config
+#        path: /home/{{ linux_username }}/.ssh/config
+        path: ~/.ssh/config
         state: touch
         mode: '0600'
 
 
     - name: Update SSH Config
       ansible.builtin.lineinfile:
+#        path: /home/{{ linux_username }}/.ssh/config
         path: /home/{{ linux_username }}/.ssh/config
         insertbefore: BOF
         regexp: '^include ~/.ssh/config.d/*.conf'

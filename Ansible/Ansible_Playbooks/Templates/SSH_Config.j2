@@ -7,7 +7,7 @@ Host {{ course_sku }}_*
 Host {{ course_sku }}_classroom
   User instructor
   Hostname {{ ROLE_IP }}
-  IdentityFile /home/travis/.ssh/instructor_key
+  IdentityFile ~/.ssh/gls_instructor_id_rsa
   Port 22022
 
 Host {{ course_sku }}_bastion

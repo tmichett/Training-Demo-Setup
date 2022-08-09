@@ -7,11 +7,11 @@ Host kvm_*
 
 Host KVM_Host
   Port 22
-  Hostname "{{ kvm_host_ip }}"
+  Hostname {{ kvm_host_ip }}
 
 Host kvm_foundation
   User kiosk
-  Hostname "{{ kvm_foundation_ip }}"
+  Hostname {{ kvm_foundation_ip }}
   Port 22
   IdentityFile /home/travis/.ssh/instructor_key
   ProxyJump KVM_Host
