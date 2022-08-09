@@ -134,3 +134,106 @@ localhost                  : ok=5    changed=1    unreachable=0    failed=0    s
 . Set the *delivery_type* variable to be *ROLE*.
 
 . Execute the playbook using *ansible-playbook SSH_Config_Setup.yml*.
+
+== Accessing the systems via SSH
+
+Depending on whether you are using KVM, ROLE, or VT access, the SSH commands and capabilities for connecting will be different based on the playbook and configuration files generated.
+
+.KVM Hosted VMs
+
+. Use SSH to connect to the workstation VM only *kvm_workstation*.
++
+[source,bash]
+----
+[travis@fedora ~]$ ssh kvm_workstation
+----
+
+.VT Hosted VMs
+
+. Use SSH to connect to the workstation VM only *workstation-vt*.
++
+[source,bash]
+----
+[travis@fedora ~]$ ssh workstation-vt
+----
+
+.ROLE/RHLS Hosted VMs
+
+This is the only deployment scenario where you can SSH to other VMs directly. For this to work, it is 100% needed that you place *ROLE* as deployment type and that all VMs have been defined in the *Templates/SSH_Config.j2* file. Most all VMs have been created and defined, however, for new courses, it is possible to update the JINJA2 template with the newer VMs.
+
+. Use SSH to connect to the workstation or any other VM using *SKU_<machine_name>*
++
+[source,bash]
+----
+[travis@fedora ~]$ ssh rh124_workstation
+----
+
+.Connecting to Other Systems
+[TIP]
+======
+It is possible in the example above to substitute *workstation* with any other VM in the classroom environment.
+
+* servera
+* serverb
+* serverc
+* hub
+* controller
+* *... and more ...*
+======
+
+.Accessing Student Systems
+[NOTE]
+======
+It is possible to run the playbook multiple times for a course delivery to get all students setup so that those systems can be accessed remotely as an instructor.
+
+Once the initial instructor VMs have been setup by setting the IP, SKU, and deployment type as ROLE, the playbooks can be re-run with the *-e* options to setup various students.
+
+.Setting up a Student set of VMs for Instructor Access
+[source,bash]
+----
+ansible-playbook SSH_Config_Setup.yml -e "ROLE_IP=150.75.250.26" -e "course_sku=yoda" <1>
+----
+<1> In this instance, *yoda* is the name of the student user.
+
+This will create a new config file in ~/.ssh/config.d/yoda.conf
++
+[source,bash]
+----
+[travis@fedora Ansible_Playbooks]$ cat ~/.ssh/config.d/yoda.conf
+Host yoda_*
+  StrictHostKeyChecking no
+  ForwardAgent yes
+  ForwardX11 no
+  PreferredAuthentications publickey
+  IdentityFile ~/.ssh/lab_rsa
+
+Host yoda_classroom
+  User instructor
+  Hostname 150.75.250.26
+  IdentityFile ~/.ssh/gls_instructor_id_rsa
+  Port 22022
+
+Host yoda_bastion
+  Hostname 172.25.252.1
+  User student
+  ProxyJump yoda_classroom
+
+Host yoda_workstation
+  Hostname workstation
+  User student
+  ProxyJump yoda_bastion
+----
+
+Now it is possible to SSH directly to student systems using the *<student_name>_<machine_name>* format as shown below.
+
+[source,bash]
+----
+[travis@fedora ~]$ ssh yoda_workstation
+----
+======
+
+.SSH Cleanup Files
+[WARNING]
+======
+It is especially important to cleanup old SSH configuration files (especially when creating them for various students). Running the playbooks based on the instructions above should re-write and update any configuration changes provided that for ROLE deployment, you choose to use SKU representation the same. It is recommended to use *lowercase* for the SKU.
+======
