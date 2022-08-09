@@ -59,7 +59,7 @@
     - name: Update SSH Config
       ansible.builtin.lineinfile:
 #        path: /home/{{ linux_username }}/.ssh/config
-        path: /home/{{ linux_username }}/.ssh/config
+        path: ~/.ssh/config
         insertbefore: BOF
         regexp: '^include ~/.ssh/config.d/*.conf'
         line: include ~/.ssh/config.d/*.conf
