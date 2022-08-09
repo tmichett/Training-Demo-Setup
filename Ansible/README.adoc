@@ -195,8 +195,8 @@ ansible-playbook SSH_Config_Setup.yml -e "ROLE_IP=150.75.250.26" -e "course_sku=
 ----
 <1> In this instance, *yoda* is the name of the student user.
 
-This will create a new config file in ~/.ssh/config.d/yoda.conf
-+
+This will create a new config file in *~/.ssh/config.d/yoda.conf* as shown below.
+
 [source,bash]
 ----
 [travis@fedora Ansible_Playbooks]$ cat ~/.ssh/config.d/yoda.conf
