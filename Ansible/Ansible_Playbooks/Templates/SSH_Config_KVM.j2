@@ -13,12 +13,12 @@ Host kvm_foundation
   User kiosk
   Hostname {{ kvm_foundation_ip }}
   Port 22
-  IdentityFile /home/travis/.ssh/instructor_key
+  IdentityFile /home/travis/.ssh/lab_rsa
   ProxyJump KVM_Host
 
 Host kvm_workstation
   User student
   Hostname 172.25.250.9
   Port 22
-  IdentityFile /home/travis/.ssh/instructor_key
+  IdentityFile /home/travis/.ssh/lab_rsa
   ProxyJump kvm_foundation

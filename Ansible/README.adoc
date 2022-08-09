@@ -1,0 +1,136 @@
+= {subject}
+:subject: Instructor Demo Guide
+:description:  Setup Guide for Instructor Demos
+Travis Michette <tmichett@redhat.com>
+:doctype: book
+:customer:  GLS
+:listing-caption: Listing
+:toc:
+:toclevels: 7
+:sectnums:
+:sectnumlevels: 6
+:numbered:
+:chapter-label:
+:pdf-page-size: LETTER
+:icons: font
+ifdef::backend-pdf[]
+:title-page-background-image: image:images/Training_Cover.png[pdfwidth=8.0in,position=top left]
+:pygments-style: tango
+:source-highlighter: pygments
+endif::[]
+ifndef::env-github[:icons: font]
+ifdef::env-github[]
+:status:
+:outfilesuffix: .adoc
+:caution-caption: :fire:
+:important-caption: :exclamation:
+:note-caption: :paperclip:
+:tip-caption: :bulb:
+:warning-caption: :warning:
+endif::[]
+:revnumber: 1.0
+
+= Setting up a System for Demonstration for Course Delivery
+
+== SSH Setup
+
+There is a single playbook provided called *SSH_Config_Setup.yml*. This playbook can be run for locally hosted, nested, KVM foundations or it can be used with the ROLE/RHLS/VT environment.
+
+.Variables for Playbook
+[source,yaml]
+----
+  vars:
+#    linux_username: travis  ### This variable is so that you can create the demo configuration for a user other than the Ansible User
+## Course SKU Only Valid when using RHU Role courses / Not valid for RHLS
+    course_sku: rh999 <1>
+    ROLE_IP: 150.239.52.xx <2>
+## Delivery Type Options VT, KVM, ROLE ##
+    delivery_type: KVM <3>
+## IP Addresses for VT or KVM courses
+    kvm_host_ip: 192.168.1.123  # IP Address for KVM Host (initial connection machine) <4>
+    kvm_foundation_ip: 192.168.122.71   # IP Address attached to NIC2 that is available on the "Externally configured NIC for F0" <5>
+    classroom_ip: "{{ ROLE_IP }}" <6>
+----
+<1> Course SKU. Creates a complete SSH config file for all systems in the course.
+<2> Classroom IP address provided from the ROLE/RHLS/VT interface. This is the public IP address you will be connecting to via SSH.
+<3> Type of delivery. *KVM*, *ROLE*, or *VT* and controls what files the playbook creates.
+<4> Used only for KVM deployments and is the "Physical Address" of the KVM host. This sets up the KVM host as a JumpBox to your nested Foundation0 on the KVM shared/NAT network for the secondary Internet facing NIC presented to the Foundation0 system.
+<5> Used only for KVM deployments and is the IP address provided by the *rht-external --status* command.
+<6> Recycles the *ROLE_IP* address for use in deployed template files to keep variable names nice.
+
+The playbook should be capable of running on all Linux distributions as well as MacOS. It has only been tested on Fedora, Red Hat, and MacOS.
+
+.Setting Variables and Updating *ansible.cfg*
+[IMPORTANT]
+======
+It is important to setup variables in the playbook prior to running. It is equally important to make any changes and adjustments to the *ansible.cfg* and other adjustments to the playbook.
+======
+
+.SSH Keys Required
+[WARNING]
+======
+The playbook sets up SSH configuration files which are required for connection to remote systems. Currently these files rely on SSH keys with specific key names.
+
+* *gls_instructor_id_rsa* - The *id_rsa* key located on Foundation0.
+* *lab_rsa* - The *lab_rsa* key located on the workstation system.
+
+It will be necessary to grab these files and place in *~/.ssh* with the appropriate permissions and name in order for the playbook to run.
+======
+
+=== Setting up the VT Demonstration Connection
+
+This is the most common type of setup. It will also be the easiest for teaching and delivering VT courses as the playbook can be run multiple times to setup configuration files for all students and the instructor machine.
+
+. Modify the playbook with the *ROLE_IP* variable.
+
+. Set the *delivery_type* variable to be *VT*.
+
+. Execute the playbook using *ansible-playbook SSH_Config_Setup.yml*.
++
+[source,bash]
+----
+[travis@fedora Ansible_Playbooks]$ ansible-playbook SSH_Config_Setup.yml
+BECOME password:
+
+PLAY [Setup System for Github with Tools] ********************************************
+
+TASK [Gathering Facts] ***************************************************************
+ok: [localhost]
+
+TASK [Create SSH Config.D Directory] *************************************************
+ok: [localhost]
+
+TASK [Create SSH Course File for ROLE] ***********************************************
+skipping: [localhost]
+
+TASK [Create SSH Course File for KVM] ************************************************
+skipping: [localhost]
+
+TASK [Create SSH Course File for VT] *************************************************
+ok: [localhost]
+
+TASK [Perform Touch on File to Ensure it Exists] *************************************
+changed: [localhost]
+
+TASK [Update SSH Config] *************************************************************
+ok: [localhost]
+
+PLAY RECAP ***************************************************************************
+localhost                  : ok=5    changed=1    unreachable=0    failed=0    skipped=2    rescued=0    ignored=0
+----
+
+=== Setting up the KVM Demonstration Connection
+
+. Modify the playbook with the *kvm_foundation_ip* variable and the *kvm_host_ip* variable.
+
+. Set the *delivery_type* variable to be *KVM*.
+
+. Execute the playbook using *ansible-playbook SSH_Config_Setup.yml*.
+
+=== Setting up the ROLE Demonstration Connection
+
+. Modify the playbook with the *course_sku* variable and the *ROLE_IP* variable.
+
+. Set the *delivery_type* variable to be *ROLE*.
+
+. Execute the playbook using *ansible-playbook SSH_Config_Setup.yml*.
