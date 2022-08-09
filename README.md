@@ -1,7 +1,20 @@
+ifndef::env-github[:icons: font]
+ifdef::env-github[]
+:status:
+:outfilesuffix: .adoc
+:caution-caption: :fire:
+:important-caption: :exclamation:
+:note-caption: :paperclip:
+:tip-caption: :bulb:
+:warning-caption: :warning:
+endif::[]
+
 # Training-Demo-Setup
 Instructions and Playbooks to Setup Workstation Environment for Training Delivery
 
 [IMPORTANT]
 ====
-The *gls_instructor_id_rsa* SSH Key is the *id_rsa* SSH key from the Foundation0 system.
+The *gls_instructor_id_rsa* SSH Key is the *id_rsa* SSH key from the Foundation0 system and must be obtained prior to running playbooks. Also, the *lab_rsa* SSH key must be obtained from workstation prior to running playbooks.
+
+See the *Ansible/README.adoc* file for more information.
 ====
