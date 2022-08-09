@@ -5,8 +5,8 @@
   vars:
 #    linux_username: travis  ### This variable is so that you can create the demo configuration for a user other than the Ansible User
 ## Course SKU Only Valid when using RHU Role courses / Not valid for RHLS
-    course_sku: rh999
-    ROLE_IP: 150.239.52.xx
+    course_sku: rh124
+    ROLE_IP: 150.239.59.182
 ## Delivery Type Options VT, KVM, ROLE ##
     delivery_type: KVM
 ## IP Addresses for VT or KVM courses
