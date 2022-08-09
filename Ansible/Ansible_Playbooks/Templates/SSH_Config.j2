@@ -3,6 +3,7 @@ Host {{ course_sku }}_*
   ForwardAgent yes
   ForwardX11 no
   PreferredAuthentications publickey
+  IdentityFile ~/.ssh/lab_rsa
 
 Host {{ course_sku }}_classroom
   User instructor
@@ -14,7 +15,6 @@ Host {{ course_sku }}_bastion
   Hostname 172.25.252.1
   User student
   ProxyJump {{ course_sku }}_classroom
-
 
 Host {{ course_sku }}_workstation
   Hostname workstation
@@ -43,5 +43,35 @@ Host {{ course_sku }}_serverc
 
 Host {{ course_sku }}_serverd
   Hostname serverd
+  User student
+  ProxyJump {{ course_sku }}_bastion
+
+Host {{ course_sku }}_servere
+  Hostname servere
+  User student
+  ProxyJump {{ course_sku }}_bastion
+
+Host {{ course_sku }}_serverf
+  Hostname serverf
+  User student
+  ProxyJump {{ course_sku }}_bastion
+
+Host {{ course_sku }}_controller
+  Hostname controller
+  User student
+  ProxyJump {{ course_sku }}_bastion
+
+Host {{ course_sku }}_hub
+  Hostname hub
+  User student
+  ProxyJump {{ course_sku }}_bastion
+
+Host {{ course_sku }}_satellite
+  Hostname satellite
+  User student
+  ProxyJump {{ course_sku }}_bastion  
+
+Host {{ course_sku }}_capsule
+  Hostname capsule
   User student
   ProxyJump {{ course_sku }}_bastion
