@@ -1,0 +1,14 @@
+  ### Play to get system ready for creating Classroom Environments
+  ### Designed to be run from localhost
+- name: Setup System for SSHuttle
+  hosts: localhost
+  become: true
+  tasks:
+    - name: Modify /etc/hosts for SSHuttle
+      ansible.builtin.blockinfile:
+        path: /etc/hosts
+        marker: "##-- {mark} RH GLS Instructor SSHuttle ANSIBLE MANAGED BLOCK --##"
+        block: |
+          #Hostname stuff for SSHuttle
+          172.25.250.9    kvm_workstation
+          172.25.252.1    workstation-vt 
