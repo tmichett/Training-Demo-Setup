@@ -1,5 +1,5 @@
 = {subject}
-:subject: Instructor Demo Guide
+:subject: TL500 Demo Setup
 :description:  Setup Guide for Instructor Demos
 Travis Michette <tmichett@redhat.com>
 :doctype: book
@@ -30,7 +30,7 @@ ifdef::env-github[]
 endif::[]
 :revnumber: 1.0
 
-= Setting up a System for Demonstration for Course Delivery
+= Setting up a System for Delivering a TL500
 
 == SSH Setup
 
@@ -237,3 +237,37 @@ Now it is possible to SSH directly to student systems using the *<student_name>_
 ======
 It is especially important to cleanup old SSH configuration files (especially when creating them for various students). Running the playbooks based on the instructions above should re-write and update any configuration changes provided that for ROLE deployment, you choose to use SKU representation the same. It is recommended to use *lowercase* for the SKU.
 ======
+
+
+
+== TL500 Specific Setup
+
+The regular SSH demo 
+
+. Create SSHuttle connection
+.. Use the *--ns=172.25.250.9* option for DNS forwarding
+.. Add the OCP Subnet as a subnet to be forwarding over the SSHuttle connection
++
+[source,bash]
+----
+[tmichett@tmichett TL500]$ sshuttle --dns -vr student@workstation-vt 172.0.0.0/8 192.168.50.0/24 10.82.1.0/24 --ns=172.25.250.9
+----
++
+.SSHuttle Configuration
+[IMPORTANT]
+======
+It is important to get the IP address of the OCP Cluster. In the example above, the way to optain the IP address was to ping the OCP console URL. The IP was in the *10.82.1.0/24* subnet, so it must be added to the *SSHuttle* command line. The DNS server must be specified to be the IP address of the Workstation VM with the *--ns=172.25.250.9* option added to the command line.
+
+======
+
+. Install the OCP CA Certificate from Red Hat Training 
++
+[source,bash]
+----
+$ ./update_certs.sh 
+Notice: Trust flag u is set automatically if the private key is present.
+Notice: Trust flag u is set automatically if the private key is present.
+----
+
+. Open the Console and the CodeReady Workspace
+
