@@ -18,3 +18,8 @@ The *gls_instructor_id_rsa* SSH Key is the *id_rsa* SSH key from the Foundation0
 
 See the *Ansible/README.adoc* file for more information.
 ====
+
+
+*Custom Certificates in Cockpit*
+
+https://kenmoini.com/post/2021/12/custom-certificates-in-cockpit/
