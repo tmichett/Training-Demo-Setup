@@ -7,11 +7,11 @@
 ## Course SKU Only Valid when using RHU Role courses / Not valid for RHLS
     course_sku: rh124
     ROLE_IP: 150.239.59.182
-## Delivery Type Options VT, KVM, ROLE ##
-    delivery_type: KVM
+## Delivery Type Options VT, KVM, ROLE, ILT ##
+    delivery_type: ILT
 ## IP Addresses for VT or KVM courses
     kvm_host_ip: 192.168.1.123 # IP Address for KVM Host (initial connection machine)
-    kvm_foundation_ip: 192.168.122.71  # IP Address attached to NIC2 that is available on the "Externally configured NIC for F0"
+    kvm_foundation_ip: 192.168.15.100  # IP Address attached to NIC2 that is available on the "Externally configured NIC for F0"
     classroom_ip: "{{ ROLE_IP }}"
   tasks:
 
@@ -47,6 +47,15 @@
         dest: ~/.ssh/config.d/VT.conf
         mode: '0600'
       when: delivery_type == "VT"
+
+    - name: Create SSH Course File for ILT
+      ansible.builtin.template:
+        src: Templates/SSH_Config_ILT.j2
+#        dest: /home/{{ linux_username }}/.ssh/config.d/VT.conf
+        dest: ~/.ssh/config.d/ILT.conf
+        mode: '0600'
+      when: delivery_type == "ILT"
+
 
     - name: Perform Touch on File to Ensure it Exists
       ansible.builtin.file:

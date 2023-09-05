@@ -1,24 +1,19 @@
 
-Host kvm_*
+Host ilt_*
   StrictHostKeyChecking no
   ForwardAgent yes
   ForwardX11 no
   #  PreferredAuthentications publickey
 
-Host KVM_Host
-  Port 22
-  Hostname {{ kvm_host_ip }}
-
-Host kvm_foundation
+Host ilt_foundation
   User kiosk
   Hostname {{ kvm_foundation_ip }}
   Port 22
   IdentityFile ~/.ssh/gls_instructor_id_rsa
-  ProxyJump KVM_Host
 
-Host kvm_workstation
+Host ilt_workstation
   User student
   Hostname 172.25.250.9
   Port 22
   IdentityFile ~/.ssh/lab_rsa
-  ProxyJump kvm_foundation
+  ProxyJump ilt_foundation
